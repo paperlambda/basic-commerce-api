@@ -3,35 +3,62 @@ import categoriesService from '../services/categories'
 
 const router = express.Router()
 
-router.get('/categories', async (req, res) => {
-  const response = await categoriesService.getCategories(req.params)
-  return res.status(200).send({ data: response })
-})
-
-router.get('/categories/:slug', async (req,res) => {
-  const response = await categoriesService.getCategories(req.params)
-  return res.status(200).send({ data: response })
-})
-
-router.patch('/categories/:slug', async (req,res) => {
-  const response = await categoriesService.patchCategory({ slug: req.params.slug, ...req.body })
-  return res.status(200).send({ data: response })
-})
-
-router.post('/categories', async (req, res) => {
-  const response = await categoriesService.createCategory(req.body)
-  if (response) {
+router.get('/categories', async (req, res, next) => {
+  try {
+    const response = await categoriesService.getCategories(req.params)
     return res.status(200).send({ data: response })
+  } catch (error) {
+    next(error)
   }
 })
 
-router.delete('/categories/:slug', async (req, res) => {
+router.get('/categories/:slug', async (req, res, next) => {
   try {
-    await categoriesService.deleteCategory(req.params)
+    const response = await categoriesService.getCategories(req.params)
+    if(!response){
+      next(new Error('NOT_FOUND'))
+      return
+    }
+    return res.status(200).send({ data: response })
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.patch('/categories/:slug', async (req,res, next) => {
+  try {
+    const response = await categoriesService.patchCategory({ slug: req.params.slug, ...req.body })
+    if(!response){
+      next(new Error('NOT_FOUND'))
+      return
+    }
+    return res.status(200).send({ data: response })
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/categories', async (req, res, next) => {
+  try {
+    const response = await categoriesService.createCategory(req.body)
+    if (response) {
+      return res.status(200).send({ data: response })
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.delete('/categories/:slug', async (req, res, next) => {
+  try {
+    const response = await categoriesService.deleteCategory(req.params)
+    if(response.deletedCount === 0) {
+      next(new Error('NOT_FOUND'))
+      return
+    }
     return res.status(204).send({ status: 'success' })
   } catch (error) {
-    console.log(error)
-    return res.send({ error })
+    next(error)
   }
 })
 
