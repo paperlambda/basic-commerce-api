@@ -18,7 +18,7 @@ const getCategories = async (params) => {
     return await CategoriesModel.findOne({ slug: params.slug })
   }
 
-  const categories = CategoriesModel.find()
+  const categories = CategoriesModel.find({ deleted: null })
   return await categories
 }
 
