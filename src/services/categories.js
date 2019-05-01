@@ -1,6 +1,14 @@
 import CategoriesModel from "../models/categories";
 
+const generateSlug = (name) => {
+  return name.toString().toLowerCase().trim().replace(/&/g, '-and-').replace(/[\s\W-]+/g, '-')
+}
+
 const createCategory = async (body) => {
+  if(!body.slug) {
+    body.slug = generateSlug(body.name)
+  }
+
   const category = new CategoriesModel(body)
   return await category.save()
 }
