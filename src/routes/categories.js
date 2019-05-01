@@ -19,7 +19,7 @@ router.get('/categories/:slug', async (req, res, next) => {
       next(new Error('NOT_FOUND'))
       return
     }
-    return res.status(200).send({ data: response })
+    return res.status(200).send(response)
   } catch (error) {
     next(error)
   }
@@ -32,7 +32,7 @@ router.patch('/categories/:slug', async (req,res, next) => {
       next(new Error('NOT_FOUND'))
       return
     }
-    return res.status(200).send({ data: response })
+    return res.status(200).send(response)
   } catch (error) {
     next(error)
   }
@@ -42,7 +42,7 @@ router.post('/categories', async (req, res, next) => {
   try {
     const response = await categoriesService.createCategory(req.body)
     if (response) {
-      return res.status(200).send({ data: response })
+      return res.status(200).send(response)
     }
   } catch (error) {
     next(error)
@@ -52,11 +52,11 @@ router.post('/categories', async (req, res, next) => {
 router.delete('/categories/:slug', async (req, res, next) => {
   try {
     const response = await categoriesService.deleteCategory(req.params)
-    if(response.deletedCount === 0) {
+    if(response.nModified === 0) {
       next(new Error('NOT_FOUND'))
       return
     }
-    return res.status(204).send({ status: 'success' })
+    return res.sendStatus(204)
   } catch (error) {
     next(error)
   }

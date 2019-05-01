@@ -20,14 +20,14 @@ const getCategories = async (params) => {
 }
 
 const patchCategory = async (body) => {
-  const update = await CategoriesModel.updateOne({ slug: body.slug }, body)
+  const update = await CategoriesModel.updateOne({ slug: body.slug }, body, { runValidators: false })
   if(update){
     return getCategories(body)
   }
 }
 
 const deleteCategory = async (params) => {
-  return await CategoriesModel.updateOne({ slug: params.slug }, { deleted: new Date() })
+  return await CategoriesModel.updateOne({ slug: params.slug }, { deleted: new Date() }, { runValidators: false })
 }
 
 export default {
