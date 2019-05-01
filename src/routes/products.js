@@ -3,14 +3,14 @@ import ProductService from '../services/products'
 
 const router = Router()
 
-router.get('/products', (req,res) => {
-  const products = ProductService.getProducts()
+router.get('/products', async (req,res) => {
+  const products = await ProductService.getProducts(req.params)
   return res.status(200).send({ data: products })
 })
 
 
-router.post('/products', (req,res) => {
-  const products = ProductService.addProduct(req.body)
+router.post('/products', async (req,res) => {
+  const products = await ProductService.addProduct(req.body)
   return res.status(200).send({ data: products })
 })
 

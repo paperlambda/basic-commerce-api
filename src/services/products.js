@@ -1,7 +1,7 @@
 import ProductModel from '../models/products'
 
 const getProducts = async (params) => {
-  const products = ProductModel.find(params)
+  const products = ProductModel.find(params).populate('categories')
   return await products
 }
 
