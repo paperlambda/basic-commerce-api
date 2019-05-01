@@ -29,8 +29,13 @@ const patchCategory = async (body) => {
   }
 }
 
+const deleteCategory = async (params) => {
+  return await CategoriesModel.updateOne({ slug: params.slug }, { deleted: new Date() })
+}
+
 export default {
   createCategory,
   getCategories,
-  patchCategory
+  patchCategory,
+  deleteCategory
 }
